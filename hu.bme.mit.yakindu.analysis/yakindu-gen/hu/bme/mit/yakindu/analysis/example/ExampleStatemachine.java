@@ -24,12 +24,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 			black = true;
 		}
 		
-		private boolean resign;
-		
-		public void raiseResign() {
-			resign = true;
-		}
-		
 		private long whiteTime;
 		
 		public long getWhiteTime() {
@@ -54,7 +48,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 			start = false;
 			white = false;
 			black = false;
-			resign = false;
 		}
 	}
 	
@@ -66,7 +59,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 		main_region_Init,
 		main_region_Black,
 		main_region_White,
-		main_region_Resignation,
 		$NullState$
 	};
 	
@@ -125,9 +117,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 			case main_region_White:
 				main_region_White_react(true);
 				break;
-			case main_region_Resignation:
-				main_region_Resignation_react(true);
-				break;
 			default:
 				// $NullState$
 			}
@@ -181,8 +170,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 			return stateVector[0] == State.main_region_Black;
 		case main_region_White:
 			return stateVector[0] == State.main_region_White;
-		case main_region_Resignation:
-			return stateVector[0] == State.main_region_Resignation;
 		default:
 			return false;
 		}
@@ -226,10 +213,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 	
 	public void raiseBlack() {
 		sCInterface.raiseBlack();
-	}
-	
-	public void raiseResign() {
-		sCInterface.raiseResign();
 	}
 	
 	public long getWhiteTime() {
@@ -288,12 +271,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 		stateVector[0] = State.main_region_White;
 	}
 	
-	/* 'default' enter sequence for state Resignation */
-	private void enterSequence_main_region_Resignation_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.main_region_Resignation;
-	}
-	
 	/* 'default' enter sequence for region main region */
 	private void enterSequence_main_region_default() {
 		react_main_region__entry_Default();
@@ -321,12 +298,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 		exitAction_main_region_White();
 	}
 	
-	/* Default exit sequence for state Resignation */
-	private void exitSequence_main_region_Resignation() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
-	}
-	
 	/* Default exit sequence for region main region */
 	private void exitSequence_main_region() {
 		switch (stateVector[0]) {
@@ -338,9 +309,6 @@ public class ExampleStatemachine implements IExampleStatemachine {
 			break;
 		case main_region_White:
 			exitSequence_main_region_White();
-			break;
-		case main_region_Resignation:
-			exitSequence_main_region_Resignation();
 			break;
 		default:
 			break;
@@ -387,12 +355,7 @@ public class ExampleStatemachine implements IExampleStatemachine {
 						
 						enterSequence_main_region_Black_default();
 					} else {
-						if (sCInterface.resign) {
-							exitSequence_main_region_Black();
-							enterSequence_main_region_Resignation_default();
-						} else {
-							did_transition = false;
-						}
+						did_transition = false;
 					}
 				}
 			}
@@ -415,25 +378,9 @@ public class ExampleStatemachine implements IExampleStatemachine {
 						
 						enterSequence_main_region_White_default();
 					} else {
-						if (sCInterface.resign) {
-							exitSequence_main_region_White();
-							enterSequence_main_region_Resignation_default();
-						} else {
-							did_transition = false;
-						}
+						did_transition = false;
 					}
 				}
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean main_region_Resignation_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (react()==false) {
-				did_transition = false;
 			}
 		}
 		return did_transition;
