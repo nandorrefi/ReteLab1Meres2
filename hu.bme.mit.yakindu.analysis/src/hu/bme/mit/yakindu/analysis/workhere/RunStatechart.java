@@ -1,7 +1,6 @@
 package hu.bme.mit.yakindu.analysis.workhere;
 
 import java.io.IOException;
-
 import hu.bme.mit.yakindu.analysis.RuntimeService;
 import hu.bme.mit.yakindu.analysis.TimerService;
 import hu.bme.mit.yakindu.analysis.example.ExampleStatemachine;
@@ -27,7 +26,6 @@ public class RunStatechart {
 			executeCommand(input, s);
 			print(s);
 		}
-		
 	}
 
 	public static void executeCommand(String input, IExampleStatemachine s) {
